@@ -273,6 +273,30 @@ body {
   pointer-events: none;
 }
 
+.envelope.open #seal-container {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.envelope.broken #seal-container {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.envelope.broken .seal-left {
+  transform: translateX(-15px) translateY(5px) rotate(-12deg);
+  opacity: 0.95;
+}
+
+.envelope.broken .seal-right {
+  transform: translateX(15px) translateY(5px) rotate(12deg);
+  opacity: 0.95;
+}
+
+.envelope.broken .party-hat-img {
+  opacity: 0;
+}
+
 /* kapag isinara na(Broken State) */
 .envelope.broken .seal-left {
   transform: translateX(-10px) translateY(3px) rotate(-8deg);
