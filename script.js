@@ -324,22 +324,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Close sequence (Top Flap)
-  if (topFlap) {
-    const handleClose = (e) => {
-      e.stopPropagation();
-      if (envelope.classList.contains('open')) {
-        envelope.classList.remove('open');
-        if (isBrokenPermanently) {
-          envelope.classList.add('broken');
-        }
-        if (video) {
-          video.pause();
-          video.currentTime = 0;
-        }
+if (topFlap) {
+  const handleClose = (e) => {
+    e.stopPropagation();
+    if (envelope.classList.contains('open')) {
+      envelope.classList.remove('open');
+      
+      // Kapag isinara ulit, lalabas na ang broken state ng seal!
+      if (isBrokenPermanently) {
+        envelope.classList.add('broken');
       }
-    };
+      
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+    }
+  };
 
-    topFlap.addEventListener('click', handleClose);
-    topFlap.addEventListener('touchstart', handleClose, { passive: false });
-  }
+  topFlap.addEventListener('click', handleClose);
+  topFlap.addEventListener('touchstart', handleClose, { passive: false });
+}
 });
