@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="heading">💖 🎉 🥳 HAPPY BIRTHDAYYY💖 🎉 🥳</div>
+
+  <!-- Interactive Envelope-->
+  <div id="envelope-wrapper" class="hidden">
+    <div class="envelope">
+      
+      <!--Background Container -->
+      <div class="video-bg-container">
+        <video autoplay loop muted playsinline id="matrix-video">
+          <source src="HBD-Matrix.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Letter Content -->
+      <div class="letter" id="letter">
+        <div class="letter-content">
+          <h3>Maligayang Kaarawan!🎉✨💖</h3>
+          <p>I hope you're doing fine. Sana ay ma-treat kita ng masarap ngayon, kaya lang medyo malayo ka hahahaha. Pero let me present to you this small gift straight from the bottom of my heart. Sana magustuhan mo.</p>
+          <p>I really hope to know you more personally. Naalala ko noong sinabi ko I can't wait to see you grow and you really did it and I am genuinely proud of your growth. Pero please, take care of your health din ha.</p>
+          <p>Once again, Happy Birthdayyyyy and enjoy your day!🎉✨💖🫶🥳</p>
+        </div>
+
+        <div class="letter-footer">
+          <div class="cake-balloon-group">
+            <img src="../resources/balloon1.png" class="balloon balloon-left" alt="Balloon">
+            <img src="../resources/cake.png" class="letter-cake" alt="Cake">
+            <img src="../resources/balloon2.png" class="balloon balloon-right" alt="Balloon">
+          </div>
+
+          <div class="qr-container">
+            <img src="../resources/HBD-bouquet.png" alt="QR Code" class="qr-code">
+            <span>SCAN ME</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Envelope & Body -->
+      <div class="envelope-top-flap"></div>
+      <div class="envelope-body"></div>
+
+<!-- Broken Seal Button -->
+      <div id="seal-container">
+        <button id="seal-btn">
+          
+          <!-- Single Party Hat na nasa labas ng seal halves -->
+          <img src="../resources/party-hat.png" alt="Party Hat" class="party-hat-img">
+
+          <!-- Hati sa Kaliwa -->
+          <div class="seal-half seal-left">
+            <svg viewBox="0 0 100 100" class="curved-text-svg">
+              <path id="textPath1" d="M 15,50 A 35,35 0 0,1 85,50" fill="none" />
+              <text font-size="10" font-weight="bold" fill="#333" letter-spacing="1">
+                <textPath href="#textPath1" startOffset="50%" text-anchor="middle">CLICK TO OPEN</textPath>
+              </text>
+            </svg>
+            <img src="../resources/heart.png" alt="Heart" class="cake-img">
+          </div>
+
+          <!-- Tapos Hati sa Kanan -->
+          <div class="seal-half seal-right">
+            <svg viewBox="0 0 100 100" class="curved-text-svg">
+              <path id="textPath2" d="M 15,50 A 35,35 0 0,1 85,50" fill="none" />
+              <text font-size="10" font-weight="bold" fill="#333" letter-spacing="1">
+                <textPath href="#textPath2" startOffset="50%" text-anchor="middle">CLICK TO OPEN</textPath>
+              </text>
+            </svg>
+            <img src="../resources/heart.png" alt="Heart" class="cake-img">
+          </div>
+
+          <!-- Maangas na Crack Line Effect sa Gitna -->
+          <div class="crack-line"></div>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- js Libraries used -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

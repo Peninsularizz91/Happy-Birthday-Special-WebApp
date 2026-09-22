@@ -1,0 +1,385 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #050005;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#heading {
+  position: absolute;
+  top: 5%;
+  width: 100%;
+  text-align: center;
+  color: #ffb6c1;
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  text-transform: lowercase;
+  text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Envelope Wrapper */
+#envelope-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+#envelope-wrapper.hidden {
+  display: none;
+}
+
+#envelope-wrapper.pop-in {
+  display: flex;
+  animation: popBouncy 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popBouncy {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+  70% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Envelope Container */
+.envelope {
+  position: relative;
+  width: 520px;
+  height: 320px;
+  background-color: #e2a9f5;
+  border-radius: 6px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  perspective: 1000px;
+}
+
+/* Video Background Layer */
+
+.video-bg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 6px;
+  z-index: 2; 
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+
+.envelope.open .video-bg-container {
+  opacity: 1;
+  z-index: 5; 
+}
+
+
+.envelope.open .envelope-body {
+  opacity: 0.15; 
+}
+
+#matrix-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Flaps and Body */
+.envelope-top-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 260px solid transparent;
+  border-right: 260px solid transparent;
+  border-top: 155px solid #c881e3;
+  z-index: 5;
+  transform-origin: top;
+  transition: transform 0.7s ease-in-out, z-index 0.3s 0.3s;
+  cursor: pointer;
+}
+
+.envelope-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  clip-path: polygon(0 0, 50% 45%, 100% 0, 100% 100%, 0 100%);
+  background-color: #d896ee;
+}
+
+#seal-container {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+#seal-btn {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+
+.seal-half {
+  position: absolute;
+  top: 0;
+  width: 110px;
+  height: 110px;
+  background-color: #ff85c0;
+  border: 3px solid #ffa0d0;
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              box-shadow 0.4s ease, 
+              opacity 0.5s ease;
+}
+
+/* Clip mask para sa Kaliwang Hati */
+.seal-left {
+  left: 0;
+  clip-path: polygon(0 0, 52% 0, 42% 35%, 58% 65%, 48% 100%, 0 100%);
+}
+
+/* Clip mask para sa Kanang Hati */
+.seal-right {
+  left: 0;
+  clip-path: polygon(52% 0, 100% 0, 100% 100%, 48% 100%, 58% 65%, 42% 35%);
+}
+
+.party-hat-img {
+  position: absolute;
+  top: -38px;
+  right: 5px;
+  width: 55px;
+  height: auto;
+  z-index: 50;
+  pointer-events: none;
+  filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.2));
+  
+  /* My wiggle wiggle/bounce animation */
+  animation: hatWiggle 2.5s ease-in-out infinite;
+  transform-origin: bottom center; /* Dito ang pivot point sa ilalim ng hat */
+}
+
+/* Wiggle & Bounce fx */
+@keyframes hatWiggle {
+  0%, 100% {
+    transform: rotate(22deg) translateY(0);
+  }
+  25% {
+    transform: rotate(16deg) translateY(-3px); /* Yuko/Tilt pakaliwa nang kaunti */
+  }
+  75% {
+    transform: rotate(28deg) translateY(-2px); /* Tilt pakanan nang kaunti */
+  }
+}
+
+/* Hover fx */
+#seal-btn:hover .party-hat-img {
+  animation: hatBounce 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes hatBounce {
+  from {
+    transform: rotate(18deg) translateY(-5px);
+  }
+  to {
+    transform: rotate(26deg) translateY(-10px);
+  }
+}
+
+
+.envelope.open .party-hat-img {
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: rotate(45deg) translateY(-20px);
+}
+
+.cake-img {
+  width: 52px;
+  height: auto;
+  margin-top: 12px;
+  z-index: 11;
+}
+
+.curved-text-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+
+
+#seal-btn:hover .seal-half {
+
+  box-shadow: 0 0 25px #ff69b4, 0 0 40px #ff1493;
+}
+
+
+#seal-btn:hover .seal-left {
+  transform: translateY(-6px) translateX(-3px) rotate(-3deg);
+}
+
+#seal-btn:hover .seal-right {
+  transform: translateY(-6px) translateX(3px) rotate(3deg);
+}
+
+
+/* Kapag clinilick (Breaking Phase) */
+.envelope.breaking .seal-left {
+  transform: translateX(-18px) rotate(-12deg);
+}
+
+.envelope.breaking .seal-right {
+  transform: translateX(18px) rotate(12deg);
+}
+
+/* Kapag nabuksan na */
+.envelope.open .seal-left {
+  transform: translateX(-40px) translateY(15px) rotate(-25deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.envelope.open .seal-right {
+  transform: translateX(40px) translateY(15px) rotate(25deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* kapag isinara na(Broken State) */
+.envelope.broken .seal-left {
+  transform: translateX(-10px) translateY(3px) rotate(-8deg);
+  opacity: 0.95;
+}
+
+.envelope.broken .seal-right {
+  transform: translateX(10px) translateY(3px) rotate(8deg);
+  opacity: 0.95;
+}
+/* --- LETTER STYLING --- */
+.letter {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  width: 82%;
+  height: 88%;
+  background-color: #ce89ef;
+  border-radius: 8px;
+  padding: 18px;
+  box-sizing: border-box;
+  z-index: 3;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  
+  /* Initial hidden position inside envelope */
+  transform: translateX(-50%) translateY(0) scale(0.9);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.letter-content h3 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.letter-content p {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  margin-bottom: 6px;
+  opacity: 0.95;
+}
+
+.letter-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* I-align sa ilalim */
+  margin-top: 10px;
+}
+
+.cake-balloon-group {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+.letter-cake {
+  width: 70px;
+  height: auto;
+}
+
+.balloon {
+  position: absolute;
+  width: 22px;
+  bottom: 10px;
+}
+
+.balloon-left { left: -18px; }
+.balloon-right { right: -18px; }
+
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qr-code {
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  padding: 4px;
+  border-radius: 6px;
+  object-fit: contain;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.qr-container span {
+  font-size: 0.65rem;
+  margin-top: 3px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+/* --- ANIMATION TRIGGERED CLASS (.open) --- */
+.envelope.open .envelope-top-flap {
+  transform: rotateX(180deg);
+  z-index: 9; /* Inangat sa 9 para clickable kapag nakatupi paitaas */
+}
+
+.envelope.open .video-bg-container {
+  opacity: 1;
+}
+
+.envelope.open .letter {
+  transform: translateX(-50%) translateY(-25px) rotate(-5deg) scale(1.02);
+  z-index: 8;
+}
