@@ -206,17 +206,27 @@ scene.add(bgParticleSystem);
 const raycaster = new THREE.Raycaster();
 const clickMouse = new THREE.Vector2();
 
-window.addEventListener('click', (event) => {
-  clickMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  clickMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+function checkHeartIntersection(clientX, clientY) {
+  clickMouse.x = (clientX / window.innerWidth) * 2 - 1;
+  clickMouse.y = -(clientY / window.innerHeight) * 2 + 1;
 
   raycaster.setFromCamera(clickMouse, camera);
   const intersects = raycaster.intersectObject(heartMesh);
 
   if (intersects.length > 0) {
     const envelopeWrapper = document.getElementById('envelope-wrapper');
-    envelopeWrapper.classList.remove('hidden');
-    envelopeWrapper.classList.add('pop-in');
+    if (envelopeWrapper) {
+      envelopeWrapper.classList.remove('hidden');
+      envelopeWrapper.classList.add('pop-in');
+    }
+  }
+}
+
+// Gumamit ng 'pointerdown' para parehong ma-detect ang Mouse at Touchscreen taps
+window.addEventListener('pointerdown', (event) => {
+  // Siguraduhing sa main canvas natap at hindi sa lalabas na envelope
+  if (event.target.tagName === 'CANVAS') {
+    checkHeartIntersection(event.clientX, event.clientY);
   }
 });
 
@@ -279,28 +289,7 @@ window.addEventListener('resize', () => {
 
 
 // ---Seal Button Click Event (Triggers Unfolding & Letter Reveal cuz why not)---
-document.addEventListener('DOMContentLoaded', () => {
-  const sealBtn = document.getElementById('seal-btn');
-  const envelope = document.querySelector('.envelope');
-
-  if (sealBtn) {
-    sealBtn.addEventListener('click', (e) => {
-      e.stopPropagation(); 
-      
-      // trigger ang animation
-      envelope.classList.add('open');
-      
-      //  background video kapag binuksan na
-      const video = document.getElementById('matrix-video');
-      if (video) {
-        video.play().catch(err => console.log("Autoplay blocked:", err));
-      }
-    });
-  }
-});
-
-
-
+// --- Seal & Envelope Interactions (Mobile & Desktop Compatible) ---
 document.addEventListener('DOMContentLoaded', () => {
   const sealBtn = document.getElementById('seal-btn');
   const envelope = document.querySelector('.envelope');
@@ -309,47 +298,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let isBrokenPermanently = false;
 
-  // Open Sequence with Crack Effect 
-  if (sealBtn) {
-    sealBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+  function handleSealOpen(e) {
+    e.stopPropagation();
+    if (e.cancelable) e.preventDefault(); // Iwas double-trigger sa touch devices
 
-      if (!envelope.classList.contains('open')) {
-        // 1. Ito yung Crack Animation
-        envelope.classList.add('breaking');
-        
-        // 2. Pagkatapos ng maikling delay (300ms), buksan ang envelope flap
-        setTimeout(() => {
-          envelope.classList.remove('breaking');
-          envelope.classList.add('open');
-          isBrokenPermanently = true;
+    if (!envelope.classList.contains('open')) {
+      envelope.classList.add('breaking');
+      
+      setTimeout(() => {
+        envelope.classList.remove('breaking');
+        envelope.classList.add('open');
+        isBrokenPermanently = true;
 
-          if (video) {
-            video.play().catch(err => console.log("Autoplay blocked:", err));
-          }
-        }, 300);
-      }
-    });
+        if (video) {
+          video.play().catch(err => console.log("Autoplay blocked:", err));
+        }
+      }, 300);
+    }
   }
 
-  // Close Sequence (Triangle Flap Click)
-  if (topFlap) {
-    topFlap.addEventListener('click', (e) => {
-      e.stopPropagation();
+  if (sealBtn) {
+    // Nag-a-accept ng Click (Desktop) at Touch (Mobile)
+    sealBtn.addEventListener('click', handleSealOpen);
+    sealBtn.addEventListener('touchstart', handleSealOpen, { passive: false });
+  }
 
+  // Close sequence (Top Flap)
+  if (topFlap) {
+    const handleClose = (e) => {
+      e.stopPropagation();
       if (envelope.classList.contains('open')) {
         envelope.classList.remove('open');
-        
-        // Kung nabasag na ang seal noon, mananatili itong may sira/broken
         if (isBrokenPermanently) {
           envelope.classList.add('broken');
         }
-
         if (video) {
           video.pause();
           video.currentTime = 0;
         }
       }
-    });
+    };
+
+    topFlap.addEventListener('click', handleClose);
+    topFlap.addEventListener('touchstart', handleClose, { passive: false });
   }
 });
