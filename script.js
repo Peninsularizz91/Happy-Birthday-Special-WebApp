@@ -1,3 +1,22 @@
+// Analytics Web App URL mula sa Google Apps Script
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwsDYkVtc5CM2JkB76DaHeyJxeSrc3N7Av3fwGCf2AKgtc4M5le_HXR-rHHCccaerr/exec";
+
+function logInteraction(eventName) {
+  const payload = {
+    eventType: eventName,
+    deviceInfo: navigator.userAgent.includes("Mobile") ? "Mobile Device" : "Desktop PC"
+  };
+
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  }).catch(err => console.log("Logging failed:", err));
+}
+
 // --- Scene Setup ---
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x050005, 0.012);
@@ -289,8 +308,11 @@ window.addEventListener('resize', () => {
 
 
 // ---Seal Button Click Event (Triggers Unfolding & Letter Reveal cuz why not)---
-// --- Seal & Envelope Interactions (Mobile & Desktop Compatible) ---
+// --- (Mobile & Desktop Compatible) ---
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Automatic log kapag binuksan ang website
+  logInteraction("Page Visit");
+
   const sealBtn = document.getElementById('seal-btn');
   const envelope = document.querySelector('.envelope');
   const topFlap = document.querySelector('.envelope-top-flap');
@@ -300,11 +322,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function handleSealOpen(e) {
     e.stopPropagation();
-    if (e.cancelable) e.preventDefault(); // Iwas double-trigger sa touch devices
+    if (e.cancelable) e.preventDefault();
 
     if (!envelope.classList.contains('open')) {
       envelope.classList.add('breaking');
       
+      // 2. Automatic log kapag clinic/tinap ang seal para buksan ang envelope
+      logInteraction("Envelope Opened");
+
       setTimeout(() => {
         envelope.classList.remove('breaking');
         envelope.classList.add('open');
@@ -318,31 +343,26 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (sealBtn) {
-    // Nag-a-accept ng Click (Desktop) at Touch (Mobile)
     sealBtn.addEventListener('click', handleSealOpen);
     sealBtn.addEventListener('touchstart', handleSealOpen, { passive: false });
   }
 
-  // Close sequence (Top Flap)
-if (topFlap) {
-  const handleClose = (e) => {
-    e.stopPropagation();
-    if (envelope.classList.contains('open')) {
-      envelope.classList.remove('open');
-      
-      // Kapag isinara ulit, lalabas na ang broken state ng seal!
-      if (isBrokenPermanently) {
-        envelope.classList.add('broken');
+  if (topFlap) {
+    const handleClose = (e) => {
+      e.stopPropagation();
+      if (envelope.classList.contains('open')) {
+        envelope.classList.remove('open');
+        if (isBrokenPermanently) {
+          envelope.classList.add('broken');
+        }
+        if (video) {
+          video.pause();
+          video.currentTime = 0;
+        }
       }
-      
-      if (video) {
-        video.pause();
-        video.currentTime = 0;
-      }
-    }
-  };
+    };
 
-  topFlap.addEventListener('click', handleClose);
-  topFlap.addEventListener('touchstart', handleClose, { passive: false });
-}
+    topFlap.addEventListener('click', handleClose);
+    topFlap.addEventListener('touchstart', handleClose, { passive: false });
+  }
 });
