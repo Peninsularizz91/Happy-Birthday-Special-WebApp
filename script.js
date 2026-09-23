@@ -1,4 +1,4 @@
-// Analytics Web App URL mula sa Google Apps Script
+// Analytics Web for security purposes lang 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwsDYkVtc5CM2JkB76DaHeyJxeSrc3N7Av3fwGCf2AKgtc4M5le_HXR-rHHCccaerr/exec";
 
 function logInteraction(eventName) {
@@ -17,7 +17,7 @@ function logInteraction(eventName) {
   }).catch(err => console.log("Logging failed:", err));
 }
 
-// --- Scene Setup ---
+// --- start Scene Setup ---
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x050005, 0.012);
 
